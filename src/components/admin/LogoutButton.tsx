@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { authSupabase } from "@/lib/supabase-auth";
 
 export default function LogoutButton() {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
 
   const handleLogout = async () => {
-    if (supabase) {
-      await supabase.auth.signOut();
+    if (authSupabase) {
+      await authSupabase.auth.signOut();
     }
     router.push("/login");
     router.refresh();
