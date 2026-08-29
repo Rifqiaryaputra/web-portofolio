@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Admin Dashboard</title>
+    
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Remix Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: 'hsl(90, 82%, 68%)',
+                        'primary-alt': 'hsl(90, 78%, 64%)',
+                        title: 'hsl(0, 0%, 4%)',
+                        black: 'hsl(227, 25%, 11%)',
+                        body: 'hsl(260, 9%, 94%)',
+                        dark: '#1e293b',
+                        light: '#f8fafc',
+                        background: '#EAEAEA',
+                        paper: '#F3F3F3'
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'brutal': '4px 4px 0 0 rgba(0,0,0,1)',
+                        'paper': '0 10px 40px rgba(0,0,0,0.03)'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--primary-color, hsl(90, 82%, 68%));
+        }
+
+        /* Modal transitions */
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+            transform: scale(0.95);
+        }
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        
+        /* Toast notification */
+        #toast {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        #toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        /* Brutalist / Paper specific styles */
+        body {
+            background-color: var(--background, #EAEAEA);
+        }
+        
+        .paper-container {
+            background-color: var(--paper, #F3F3F3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+        }
+        
+        .brutal-btn {
+            border: 2px solid hsl(0, 0%, 4%);
+            box-shadow: 4px 4px 0 0 rgba(0,0,0,1);
+            transition: all 0.3s ease;
+        }
+        
+        .brutal-btn:active {
+            box-shadow: 2px 2px 0 0 rgba(0,0,0,1);
+            transform: translate(2px, 2px);
+        }
+        
+        .brutal-input {
+            border: 2px solid #ccc;
+            transition: border-color 0.3s ease;
+        }
+        
+        .brutal-input:focus {
+            border-color: hsl(0, 0%, 4%);
+            outline: none;
+        }
+    </style>
+</head>
+<body class="bg-background font-sans text-title antialiased h-screen overflow-hidden flex">
+
+    <!-- Sidebar -->
+    <aside class="bg-black text-white w-64 flex-shrink-0 flex flex-col h-full hidden md:flex transition-all duration-300 z-20 absolute md:relative border-r-[2px] border-title" id="sidebar">
+        <!-- Logo -->
+        <div class="h-16 flex items-center px-6 border-b-[2px] border-title bg-black justify-between">
+            <span class="font-bold text-xl tracking-wider text-primary">ADMIN PANEL</span>
+            <button id="closeSidebarBtn" class="md:hidden text-gray-400 hover:text-white">
+                <i class="ri-close-line text-2xl"></i>
+            </button>
+        </div>
+        
+        <!-- Nav Links -->
+        <nav class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1">
+                <li>
+                    <a href="#" class="nav-link active flex items-center px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors" data-target="dashboard-section">
+                        <i class="ri-dashboard-line mr-3 text-lg"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link flex items-center px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors" data-target="profile-section">
+                        <i class="ri-user-settings-line mr-3 text-lg"></i> Profile Information
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link flex items-center px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors" data-target="skills-section">
+                        <i class="ri-tools-line mr-3 text-lg"></i> Skills & Tools
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link flex items-center px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors" data-target="experience-section">
+                        <i class="ri-briefcase-4-line mr-3 text-lg"></i> Experience
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link flex items-center px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors" data-target="education-section">
+                        <i class="ri-book-read-line mr-3 text-lg"></i> Education
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link flex items-center px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors" data-target="projects-section">
+                        <i class="ri-macbook-line mr-3 text-lg"></i> Projects
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <!-- User/Logout -->
+        <div class="p-4 border-t border-gray-700">
+            <button onclick="showToast('Logged out successfully', 'success')" class="flex items-center w-full px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors">
+                <i class="ri-logout-box-line mr-3"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 flex flex-col h-full overflow-hidden w-full relative">
+        
+        <!-- Top Header -->
+        <header class="h-16 bg-paper shadow-paper flex items-center justify-between px-4 sm:px-6 z-10 border-b-[2px] border-title">
+            <div class="flex items-center">
+                <button id="sidebarToggleBtn" class="md:hidden text-gray-500 hover:text-title mr-4">
+                    <i class="ri-menu-line text-2xl"></i>
+                </button>
+                <h1 class="text-xl font-bold tracking-tight text-title" id="page-title">Dashboard</h1>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <a href="#" onclick="showToast('Preview mode activated', 'info')" class="hidden sm:flex items-center text-sm font-medium text-gray-600 hover:text-primary transition-colors">
+                    <i class="ri-external-link-line mr-1"></i> View Live Site
+                </a>
+                <div class="h-8 w-8 rounded-full bg-primary border-[2px] border-title flex items-center justify-center text-title font-bold">
+                    NL
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Scrollable Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-background p-4 sm:p-6 lg:p-8" id="main-content">
+            
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section max-w-[1120px] mx-auto">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Stat Card 1 -->
+                    <div class="paper-container border-[2px] border-title p-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm font-bold mb-1">Total Projects</p>
+                                <h3 class="text-4xl font-bold text-title" id="stat-projects">4</h3>
+                            </div>
+                            <div class="h-12 w-12 rounded-full bg-primary border-[2px] border-title flex items-center justify-center text-title shadow-brutal">
+                                <i class="ri-macbook-line text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stat Card 2 -->
+                    <div class="paper-container border-[2px] border-title p-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm font-bold mb-1">Skills Listed</p>
+                                <h3 class="text-4xl font-bold text-title" id="stat-skills">8</h3>
+                            </div>
+                            <div class="h-12 w-12 rounded-full bg-white border-[2px] border-title flex items-center justify-center text-title shadow-brutal">
+                                <i class="ri-tools-line text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stat Card 3 -->
+                    <div class="paper-container border-[2px] border-title p-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm font-bold mb-1">Experience</p>
+                                <h3 class="text-4xl font-bold text-title" id="stat-experience">2</h3>
+                            </div>
+                            <div class="h-12 w-12 rounded-full bg-primary border-[2px] border-title flex items-center justify-center text-title shadow-brutal">
+                                <i class="ri-briefcase-4-line text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stat Card 4 -->
+                    <div class="paper-container border-[2px] border-title p-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm font-bold mb-1">Profile Status</p>
+                                <h3 class="text-2xl font-bold text-green-600 mt-2">Active</h3>
+                            </div>
+                            <div class="h-12 w-12 rounded-full bg-white border-[2px] border-title flex items-center justify-center text-title shadow-brutal">
+                                <i class="ri-checkbox-circle-line text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="paper-container border-[2px] border-title p-8">
+                    <h2 class="bg-primary text-title inline-block px-3 py-1 font-bold mb-6 text-base border-[2px] border-title">Quick Actions</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <button onclick="document.querySelector('[data-target=\'projects-section\']').click()" class="flex flex-col items-center justify-center p-6 bg-white border-[2px] border-title brutal-btn group">
+                            <div class="h-12 w-12 rounded-full bg-primary border-[2px] border-title flex items-center justify-center mb-3 group-hover:-translate-y-1 transition-transform">
+                                <i class="ri-add-circle-line text-xl text-title"></i>
+                            </div>
+                            <span class="font-bold text-title">Add New Project</span>
+                        </button>
+                        <button onclick="document.querySelector('[data-target=\'profile-section\']').click()" class="flex flex-col items-center justify-center p-6 bg-white border-[2px] border-title brutal-btn group">
+                            <div class="h-12 w-12 rounded-full bg-white border-[2px] border-title flex items-center justify-center mb-3 group-hover:-translate-y-1 transition-transform">
+                                <i class="ri-edit-box-line text-xl text-title"></i>
+                            </div>
+                            <span class="font-bold text-title">Update Profile Text</span>
+                        </button>
+                        <button onclick="showToast('Exporting data...', 'info')" class="flex flex-col items-center justify-center p-6 bg-white border-[2px] border-title brutal-btn group">
+                            <div class="h-12 w-12 rounded-full bg-primary border-[2px] border-title flex items-center justify-center mb-3 group-hover:-translate-y-1 transition-transform">
+                                <i class="ri-download-cloud-line text-xl text-title"></i>
+                            </div>
+                            <span class="font-bold text-title">Backup Data</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile-section" class="content-section hidden max-w-[1120px] mx-auto">
+                <div class="paper-container border-[2px] border-title p-8">
+                    <form id="profile-form" onsubmit="handleProfileSubmit(event)">
+                        <div class="flex justify-between items-center mb-8">
+                            <h2 class="bg-primary text-title inline-block px-3 py-1 font-bold text-base border-[2px] border-title">Basic Information</h2>
+                            <button type="submit" class="bg-white text-title px-6 py-2.5 rounded-full font-bold brutal-btn text-sm hover:bg-primary">
+                                Save Changes
+                            </button>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Left Column -->
+                            <div class="space-y-5">
+                                <div>
+                                    <label class="block text-sm font-bold text-title mb-2">Full Name</label>
+                                    <input type="text" id="prof-name" class="w-full brutal-input rounded px-4 py-2.5 bg-white" value="Nia Loren">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-title mb-2">Professional Title</label>
+                                    <input type="text" id="prof-title" class="w-full brutal-input rounded px-4 py-2.5 bg-white" value="Creative strategist">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-title mb-2">Profile Image URL</label>
+                                    <div class="flex gap-2">
+                                        <input type="text" id="prof-image" class="w-full brutal-input rounded px-4 py-2.5 bg-white" value="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d...">
+                                        <button type="button" class="bg-primary text-title px-4 rounded brutal-btn"><i class="ri-image-line"></i></button>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="text-lg font-bold text-title pt-6 border-t-[2px] border-dashed border-title">Contact Details</h3>
+                                <div>
+                                    <label class="block text-sm font-bold text-title mb-2">Email Address</label>
+                                    <input type="email" id="prof-email" class="w-full brutal-input rounded px-4 py-2.5 bg-white" value="email@domain.com">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-title mb-2">Location</label>
+                                    <input type="text" id="prof-loc" class="w-full brutal-input rounded px-4 py-2.5 bg-white" value="Yogyakarta">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-title mb-2">WhatsApp Number</label>
+                                    <input type="text" id="prof-phone" class="w-full brutal-input rounded px-4 py-2.5 bg-white" value="+62 823 1234 9876">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-title mb-2">LinkedIn URL</label>
+                                    <input type="text" id="prof-linkedin" class="w-full brutal-input rounded px-4 py-2.5 bg-white" value="linkedin.com/in/rifqi-arya-putra">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-title mb-2">Upload CV (PDF)</label>
+                                    <input type="file" id="prof-cv" accept=".pdf" class="w-full brutal-input rounded bg-white text-sm file:mr-4 file:py-2.5 file:px-4 file:border-0 file:border-r-[2px] file:border-title file:text-sm file:font-bold file:bg-primary file:text-title hover:file:bg-white cursor-pointer transition-colors">
+                                </div>
+                            </div>
+                            
+                            <!-- Right Column -->
+                            <div class="space-y-5">
+                                <div>
+                                    <label class="block text-sm font-bold text-title mb-2">About Me (Profile Summary)</label>
+                                    <textarea id="prof-about" rows="8" class="w-full brutal-input rounded px-4 py-2.5 bg-white resize-none">Creative strategist with an insatiable curiosity who merges design, culture, and brand psychology. I help startups project a bold image, connect with their audience, and create an unforgettable experience. I have over six years of experience building brand universes that capture attention and leave a lasting impression.</textarea>
+                                </div>
+                                
+                                <div class="p-6 bg-white border-[2px] border-title mt-6 shadow-brutal">
+                                    <h4 class="text-sm font-bold text-title mb-4 bg-primary inline-block px-2 border-[2px] border-title">Image Preview</h4>
+                                    <div class="w-[200px] h-[260px] mx-auto relative mt-4">
+                                        <!-- Dashed Border -->
+                                        <div class="absolute inset-[-1rem] border-[2px] border-dashed border-title transform rotate-[4deg] z-0"></div>
+                                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Preview" class="relative z-10 w-full h-full object-cover grayscale border-[2px] border-title bg-white">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Skills & Tools Section -->
+            <section id="skills-section" class="content-section hidden max-w-[1120px] mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Text Skills -->
+                    <div class="paper-container border-[2px] border-title p-6 md:p-8 flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="bg-primary text-title inline-block px-3 py-1 font-bold text-base border-[2px] border-title">Professional Skills</h2>
+                            <button onclick="openSkillModal()" class="bg-white text-title px-4 py-2 rounded-full font-bold brutal-btn text-xs flex items-center hover:bg-primary">
+                                <i class="ri-add-line mr-1"></i> Add Skill
+                            </button>
+                        </div>
+                        <div class="flex-1 bg-white border-[2px] border-title p-4 shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                            <ul id="skills-list" class="space-y-3">
+                                <!-- Populated by JS -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Tools with Icons -->
+                    <div class="paper-container border-[2px] border-title p-6 md:p-8 flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="bg-primary text-title inline-block px-3 py-1 font-bold text-base border-[2px] border-title">Tools & Tech</h2>
+                            <button onclick="openToolModal()" class="bg-white text-title px-4 py-2 rounded-full font-bold brutal-btn text-xs flex items-center hover:bg-primary">
+                                <i class="ri-add-line mr-1"></i> Add Tool
+                            </button>
+                        </div>
+                        <div class="flex-1 bg-white border-[2px] border-title p-4 shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                            <ul id="tools-list" class="space-y-3">
+                                <!-- Populated by JS -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience Section -->
+            <section id="experience-section" class="content-section hidden max-w-[1120px] mx-auto">
+                <div class="paper-container border-[2px] border-title p-6 md:p-8">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="bg-primary text-title inline-block px-3 py-1 font-bold text-base border-[2px] border-title">Work Experience</h2>
+                        <button onclick="openExpModal()" class="bg-white text-title px-6 py-2.5 rounded-full font-bold brutal-btn text-sm flex items-center hover:bg-primary">
+                            <i class="ri-add-line mr-2"></i> Add Experience
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white border-[2px] border-title p-4 md:p-6 shadow-brutal">
+                        <div id="exp-list-container" class="flex flex-col gap-8">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Education Section -->
+            <section id="education-section" class="content-section hidden max-w-[1120px] mx-auto">
+                <div class="paper-container border-[2px] border-title p-6 md:p-8">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="bg-primary text-title inline-block px-3 py-1 font-bold text-base border-[2px] border-title">Education History</h2>
+                        <button onclick="openEduModal()" class="bg-white text-title px-6 py-2.5 rounded-full font-bold brutal-btn text-sm flex items-center hover:bg-primary">
+                            <i class="ri-add-line mr-2"></i> Add Education
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white border-[2px] border-title p-4 md:p-6 shadow-brutal">
+                        <div id="edu-list-container" class="flex flex-col gap-6">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects-section" class="content-section hidden max-w-[1120px] mx-auto">
+                <div class="paper-container border-[2px] border-title p-6 md:p-8">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="bg-primary text-title inline-block px-3 py-1 font-bold text-base border-[2px] border-title">Portfolio Projects</h2>
+                        <button onclick="openProjectModal()" class="bg-white text-title px-6 py-2.5 rounded-full font-bold brutal-btn text-sm flex items-center hover:bg-primary">
+                            <i class="ri-add-line mr-2"></i> Add Project
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12" id="projects-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Backdrop for modals -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-title bg-opacity-80 z-40 hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm"></div>
+
+    <!-- Skill Modal -->
+    <div id="skill-modal" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 invisible opacity-0">
+        <div class="modal-content paper-container border-[2px] border-title shadow-[8px_8px_0_0_rgba(0,0,0,1)] w-full max-w-md overflow-hidden bg-paper rounded-none">
+            <div class="px-6 py-4 border-b-[2px] border-title flex justify-between items-center bg-primary">
+                <h3 class="text-lg font-bold text-title" id="skill-modal-title">Add Skill</h3>
+                <button onclick="closeModals()" class="text-title hover:text-white transition-colors bg-white border-[2px] border-title w-8 h-8 flex items-center justify-center brutal-btn"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="p-6 bg-white">
+                <form id="skill-form" onsubmit="saveSkill(event)">
+                    <input type="hidden" id="skill-id">
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-title mb-2">Skill Name</label>
+                        <input type="text" id="skill-name" required class="w-full brutal-input rounded px-4 py-2.5 bg-background" placeholder="e.g. Brand Identity Design">
+                    </div>
+                    <div class="flex justify-end gap-4 mt-8">
+                        <button type="button" onclick="closeModals()" class="px-6 py-2 text-sm font-bold text-title bg-white brutal-btn rounded-full hover:bg-background">Cancel</button>
+                        <button type="submit" class="px-6 py-2 text-sm font-bold text-title bg-primary brutal-btn rounded-full hover:bg-white">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tool Modal -->
+    <div id="tool-modal" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 invisible opacity-0">
+        <div class="modal-content paper-container border-[2px] border-title shadow-[8px_8px_0_0_rgba(0,0,0,1)] w-full max-w-md overflow-hidden bg-paper rounded-none">
+            <div class="px-6 py-4 border-b-[2px] border-title flex justify-between items-center bg-primary">
+                <h3 class="text-lg font-bold text-title" id="tool-modal-title">Add Tool</h3>
+                <button onclick="closeModals()" class="text-title hover:text-white transition-colors bg-white border-[2px] border-title w-8 h-8 flex items-center justify-center brutal-btn"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="p-6 bg-white">
+                <form id="tool-form" onsubmit="saveTool(event)">
+                    <input type="hidden" id="tool-id">
+                    <div class="mb-5">
+                        <label class="block text-sm font-bold text-title mb-2">Tool Name</label>
+                        <input type="text" id="tool-name" required class="w-full brutal-input rounded px-4 py-2.5 bg-background" placeholder="e.g. React">
+                    </div>
+                    <div class="mb-5">
+                        <label class="block text-sm font-bold text-title mb-2">Remix Icon Class</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="tool-icon" required class="flex-1 brutal-input rounded px-4 py-2.5 bg-background" placeholder="e.g. ri-reactjs-line">
+                            <a href="https://remixicon.com/" target="_blank" class="px-4 py-2 bg-white brutal-btn flex items-center justify-center" title="Find icons">
+                                <i class="ri-search-line font-bold"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-title mb-2">Icon Color (Hex)</label>
+                        <input type="text" id="tool-color" class="w-full brutal-input rounded px-4 py-2.5 bg-background" placeholder="e.g. #61DAFB">
+                    </div>
+                    <div class="flex justify-end gap-4 mt-8">
+                        <button type="button" onclick="closeModals()" class="px-6 py-2 text-sm font-bold text-title bg-white brutal-btn rounded-full hover:bg-background">Cancel</button>
+                        <button type="submit" class="px-6 py-2 text-sm font-bold text-title bg-primary brutal-btn rounded-full hover:bg-white">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Experience Modal -->
+    <div id="exp-modal" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 invisible opacity-0">
+        <div class="modal-content paper-container border-[2px] border-title shadow-[8px_8px_0_0_rgba(0,0,0,1)] w-full max-w-2xl overflow-hidden bg-paper rounded-none max-h-[90vh] flex flex-col">
+            <div class="px-6 py-4 border-b-[2px] border-title flex justify-between items-center bg-primary flex-shrink-0">
+                <h3 class="text-lg font-bold text-title" id="exp-modal-title">Add Experience</h3>
+                <button onclick="closeModals()" class="text-title hover:text-white transition-colors bg-white border-[2px] border-title w-8 h-8 flex items-center justify-center brutal-btn"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="p-6 bg-white overflow-y-auto">
+                <form id="exp-form" onsubmit="saveExp(event)">
+                    <input type="hidden" id="exp-id">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+                        <div>
+                            <label class="block text-sm font-bold text-title mb-2">Location / Setup</label>
+                            <input type="text" id="exp-loc" required class="w-full brutal-input rounded px-4 py-2.5 bg-background" placeholder="e.g. Remote">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-title mb-2">Duration</label>
+                            <input type="text" id="exp-dur" required class="w-full brutal-input rounded px-4 py-2.5 bg-background" placeholder="e.g. 2021 - Present">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-title mb-2">Role / Job Title</label>
+                            <input type="text" id="exp-role" required class="w-full brutal-input rounded px-4 py-2.5 bg-background" placeholder="e.g. Brand Strategist / Freelance">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-title mb-2">Description (Bullet points, separate by new line)</label>
+                            <textarea id="exp-desc" rows="5" required class="w-full brutal-input rounded px-4 py-2.5 bg-background resize-y" placeholder="- Crafted full brand identities...&#10;- Increased engagement by 300%..."></textarea>
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-4 mt-6 pt-6 border-t-[2px] border-dashed border-title">
+                        <button type="button" onclick="closeModals()" class="px-6 py-2 text-sm font-bold text-title bg-white brutal-btn rounded-full hover:bg-background">Cancel</button>
+                        <button type="submit" class="px-6 py-2 text-sm font-bold text-title bg-primary brutal-btn rounded-full hover:bg-white">Save Experience</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Education Modal -->
+    <div id="edu-modal" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 invisible opacity-0">
+        <div class="modal-content paper-container border-[2px] border-title shadow-[8px_8px_0_0_rgba(0,0,0,1)] w-full max-w-md overflow-hidden bg-paper rounded-none">
+            <div class="px-6 py-4 border-b-[2px] border-title flex justify-between items-center bg-primary">
+                <h3 class="text-lg font-bold text-title" id="edu-modal-title">Add Education</h3>
+                <button onclick="closeModals()" class="text-title hover:text-white transition-colors bg-white border-[2px] border-title w-8 h-8 flex items-center justify-center brutal-btn"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="p-6 bg-white">
+                <form id="edu-form" onsubmit="saveEdu(event)">
+                    <input type="hidden" id="edu-id">
+                    <div class="mb-5">
+                        <label class="block text-sm font-bold text-title mb-2">Year / Class</label>
+                        <input type="text" id="edu-year" required class="w-full brutal-input rounded px-4 py-2.5 bg-background" placeholder="e.g. Class of 2022">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-title mb-2">Degree & Institution</label>
+                        <input type="text" id="edu-degree" required class="w-full brutal-input rounded px-4 py-2.5 bg-background" placeholder="e.g. Web Programming - Programming school">
+                    </div>
+                    <div class="flex justify-end gap-4 mt-8">
+                        <button type="button" onclick="closeModals()" class="px-6 py-2 text-sm font-bold text-title bg-white brutal-btn rounded-full hover:bg-background">Cancel</button>
+                        <button type="submit" class="px-6 py-2 text-sm font-bold text-title bg-primary brutal-btn rounded-full hover:bg-white">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 invisible opacity-0">
+        <div class="modal-content paper-container border-[2px] border-title shadow-[8px_8px_0_0_rgba(0,0,0,1)] w-full max-w-2xl overflow-hidden bg-paper rounded-none max-h-[90vh] flex flex-col">
+            <div class="px-6 py-4 border-b-[2px] border-title flex justify-between items-center bg-primary flex-shrink-0">
+                <h3 class="text-lg font-bold text-title" id="project-modal-title">Add Project</h3>
+                <button onclick="closeModals()" class="text-title hover:text-white transition-colors bg-white border-[2px] border-title w-8 h-8 flex items-center justify-center brutal-btn"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="p-6 bg-white overflow-y-auto">
+                <form id="project-form" onsubmit="saveProject(event)">
+                    <input type="hidden" id="proj-id">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-title mb-2">Project Title</label>
+                            <input type="text" id="proj-title" required class="w-full brutal-input rounded px-4 py-2.5 bg-background" placeholder="e.g. E-commerce Platform">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-title mb-2">Image URL</label>
+                            <input type="url" id="proj-image" required class="w-full brutal-input rounded px-4 py-2.5 bg-background" placeholder="https://images.unsplash.com/...">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-title mb-2">Description</label>
+                            <textarea id="proj-desc" rows="3" required class="w-full brutal-input rounded px-4 py-2.5 bg-background resize-y" placeholder="Short description of the project..."></textarea>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-title mb-2">Tags (Comma separated)</label>
+                            <input type="text" id="proj-tags" required class="w-full brutal-input rounded px-4 py-2.5 bg-background" placeholder="e.g. React, Node.js, Tailwind">
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-4 mt-6 pt-6 border-t-[2px] border-dashed border-title">
+                        <button type="button" onclick="closeModals()" class="px-6 py-2 text-sm font-bold text-title bg-white brutal-btn rounded-full hover:bg-background">Cancel</button>
+                        <button type="submit" class="px-6 py-2 text-sm font-bold text-title bg-primary brutal-btn rounded-full hover:bg-white">Save Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 px-6 py-4 bg-white border-[2px] border-title shadow-brutal flex items-center gap-3 z-[100] text-title font-bold hidden">
+        <i class="ri-checkbox-circle-fill text-xl text-primary" id="toast-icon"></i>
+        <span id="toast-message" class="text-sm">Action successful</span>
+    </div>
+
+    <script>
+        // --- State Management ---
+        // Simulating a database/backend with in-memory objects based on the provided HTML
+        
+        let state = {
+            skills: [
+                { id: 1, name: "Brand Identity Design" },
+                { id: 2, name: "Content Strategy." },
+                { id: 3, name: "Social Media Campaigns." },
+                { id: 4, name: "Copywriting." },
+                { id: 5, name: "Figma, Canva, Adobe CC." },
+                { id: 6, name: "Trend Forecasting." },
+                { id: 7, name: "Motion Graphics (After Effects)." },
+                { id: 8, name: "Creative Direction." }
+            ],
+            tools: [
+                { id: 1, name: "React", icon: "ri-reactjs-line", color: "#61DAFB" },
+                { id: 2, name: "JavaScript", icon: "ri-javascript-fill", color: "#F7DF1E" },
+                { id: 3, name: "GitHub", icon: "ri-github-fill", color: "" },
+                { id: 4, name: "Git", icon: "ri-git-merge-line", color: "#F05032" },
+                { id: 5, name: "PostgreSQL", icon: "ri-database-2-fill", color: "#336791" },
+                { id: 6, name: "Node Js", icon: "ri-nodejs-line", color: "#339933" },
+                { id: 7, name: "Ilustrator", icon: "ri-pen-nib-fill", color: "#FF9A00" },
+                { id: 8, name: "Figma", icon: "ri-figma-fill", color: "#F24E1E" }
+            ],
+            experience: [
+                { 
+                    id: 1, 
+                    location: "Remote", 
+                    duration: "2021 - Present", 
+                    role: "Brand Strategist / Freelance",
+                    desc: "Crafted full brand identities for 15+ startups in skincare, wellness, and tech.\nIncreased engagement by 300% on average via social-first strategy revamps.\nCollaborated with copywriters, motion designers, and dev teams for seamless rollouts."
+                },
+                { 
+                    id: 2, 
+                    location: "NYC", 
+                    duration: "2018 - 2021", 
+                    role: "Creative Lead / Glitch Studio",
+                    desc: "Crafted full brand identities for 15+ startups in skincare, wellness, and tech.\nIncreased engagement by 300% on average via social-first strategy revamps.\nCollaborated with copywriters, motion designers, and dev teams for seamless rollouts."
+                }
+            ],
+            education: [
+                { id: 1, year: "Class of 2016", degree: "Systems Engineering - University" },
+                { id: 2, year: "Class of 2022", degree: "Web Programming - Programming school" },
+                { id: 3, year: "Class of 2024", degree: "Usability (UX/UI) - Design school" }
+            ],
+            projects: [
+                {
+                    id: 1,
+                    title: "Modern Design Project",
+                    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    desc: "Professional website for a company, using HTML, CSS, JavaScript, Gsap, Figma, Database and others.",
+                    tags: "HTML, CSS, JS"
+                },
+                {
+                    id: 2,
+                    title: "Modern Design Project",
+                    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    desc: "Professional website for a company, using HTML, CSS, JavaScript, Gsap, Figma, Database and others.",
+                    tags: "React, Node.js, Figma"
+                },
+                {
+                    id: 3,
+                    title: "Modern Design Project",
+                    image: "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    desc: "Professional website for a company, using HTML, CSS, JavaScript, Gsap, Figma, Database and others.",
+                    tags: "Vue, Tailwind, Supabase"
+                },
+                {
+                    id: 4,
+                    title: "Modern Design Project",
+                    image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    desc: "Professional website for a company, using HTML, CSS, JavaScript, Gsap, Figma, Database and others.",
+                    tags: "Next.js, TypeScript, PostgreSQL"
+                }
+            ]
+        };
+
+        // --- UI Initialization & Navigation ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavigation();
+            initSidebarToggle();
+            renderAllData();
+            updateDashboardStats();
+        });
+
+        // Handle sidebar navigation
+        function initNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.content-section');
+            const pageTitle = document.getElementById('page-title');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Update active nav state
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    // Hide all sections
+                    sections.forEach(s => s.classList.add('hidden'));
+                    
+                    // Show target section
+                    const targetId = link.getAttribute('data-target');
+                    document.getElementById(targetId).classList.remove('hidden');
+                    
+                    // Update title
+                    pageTitle.textContent = link.textContent.trim();
+
+                    // On mobile, close sidebar after clicking
+                    if (window.innerWidth < 768) {
+                        toggleSidebar();
+                    }
+                });
+            });
+        }
+
+        // Handle mobile sidebar toggle
+        function initSidebarToggle() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('sidebarToggleBtn');
+            const closeBtn = document.getElementById('closeSidebarBtn');
+
+            function toggleSidebar() {
+                if (sidebar.classList.contains('hidden')) {
+                    sidebar.classList.remove('hidden');
+                    sidebar.classList.add('flex', 'w-full');
+                    sidebar.style.zIndex = '50';
+                } else {
+                    sidebar.classList.add('hidden');
+                    sidebar.classList.remove('flex', 'w-full');
+                }
+            }
+
+            toggleBtn.addEventListener('click', toggleSidebar);
+            closeBtn.addEventListener('click', toggleSidebar);
+            // Make globally accessible for nav clicks
+            window.toggleSidebar = toggleSidebar; 
+        }
+
+        function updateDashboardStats() {
+            document.getElementById('stat-projects').textContent = state.projects.length;
+            document.getElementById('stat-skills').textContent = state.skills.length + state.tools.length;
+            document.getElementById('stat-experience').textContent = state.experience.length;
+        }
+
+        // --- Render Functions ---
+
+        function renderAllData() {
+            renderSkills();
+            renderTools();
+            renderExperience();
+            renderEducation();
+            renderProjects();
+        }
+
+        function renderSkills() {
+            const list = document.getElementById('skills-list');
+            list.innerHTML = state.skills.map(skill => `
+                <li class="flex items-center justify-between py-2 border-b-[1px] border-dashed border-gray-300 last:border-0 group">
+                    <span class="text-title font-medium text-sm"><span class="text-primary mr-2">•</span>${skill.name}</span>
+                    <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="editSkill(${skill.id})" class="text-title hover:text-primary p-1"><i class="ri-edit-box-line text-lg"></i></button>
+                        <button onclick="deleteSkill(${skill.id})" class="text-title hover:text-red-500 p-1"><i class="ri-delete-bin-line text-lg"></i></button>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        function renderTools() {
+            const list = document.getElementById('tools-list');
+            list.innerHTML = state.tools.map(tool => `
+                <li class="flex items-center justify-between py-2 border-b-[1px] border-dashed border-gray-300 last:border-0 group">
+                    <div class="flex items-center gap-3">
+                        <i class="${tool.icon} text-xl" style="color: ${tool.color || 'hsl(0, 0%, 4%)'}"></i>
+                        <span class="text-title font-bold text-sm">${tool.name}</span>
+                    </div>
+                    <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="editTool(${tool.id})" class="text-title hover:text-primary p-1"><i class="ri-edit-box-line text-lg"></i></button>
+                        <button onclick="deleteTool(${tool.id})" class="text-title hover:text-red-500 p-1"><i class="ri-delete-bin-line text-lg"></i></button>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        function renderExperience() {
+            const container = document.getElementById('exp-list-container');
+            container.innerHTML = state.experience.map(exp => {
+                const descList = exp.desc.split('\n').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('');
+                return `
+                <div class="group relative border-[2px] border-transparent hover:border-title p-4 transition-colors">
+                    <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="editExp(${exp.id})" class="bg-white border-[2px] border-title text-title hover:bg-primary w-8 h-8 flex items-center justify-center brutal-btn"><i class="ri-edit-box-line"></i></button>
+                        <button onclick="deleteExp(${exp.id})" class="bg-white border-[2px] border-title text-title hover:bg-red-400 w-8 h-8 flex items-center justify-center brutal-btn"><i class="ri-delete-bin-line"></i></button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-4 sm:gap-8 text-sm md:text-[15px]">
+                        <div class="font-bold text-title leading-snug">${exp.location} / <br> ${exp.duration}</div>
+                        <div>
+                            <h3 class="font-bold text-base mb-3 text-title">${exp.role}</h3>
+                            <ul class="list-disc list-outside ml-4 text-gray-700 space-y-2">
+                                ${descList}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `}).join('<div class="border-b-[2px] border-dashed border-title w-full my-2"></div>');
+        }
+
+        function renderEducation() {
+            const container = document.getElementById('edu-list-container');
+            container.innerHTML = state.education.map(edu => `
+                <div class="group relative border-[2px] border-transparent hover:border-title p-4 transition-colors">
+                    <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="editEdu(${edu.id})" class="bg-white border-[2px] border-title text-title hover:bg-primary w-8 h-8 flex items-center justify-center brutal-btn"><i class="ri-edit-box-line"></i></button>
+                        <button onclick="deleteEdu(${edu.id})" class="bg-white border-[2px] border-title text-title hover:bg-red-400 w-8 h-8 flex items-center justify-center brutal-btn"><i class="ri-delete-bin-line"></i></button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-2 sm:gap-8 text-sm md:text-[15px] items-center">
+                        <div class="font-bold text-title">${edu.year}</div>
+                        <div class="font-medium text-title">${edu.degree}</div>
+                    </div>
+                </div>
+            `).join('<div class="border-b-[2px] border-dashed border-title w-full my-1"></div>');
+        }
+
+        function renderProjects() {
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = state.projects.map(proj => {
+                const tagsHtml = proj.tags.split(',').map(tag => 
+                    `<span class="text-xs font-bold px-2.5 py-1 border-[2px] border-title rounded bg-white text-title">${tag.trim()}</span>`
+                ).join('');
+                
+                return `
+                <article class="bg-white border-[2px] border-title shadow-[4px_4px_0_0_rgba(0,0,0,1)] flex flex-col h-full group">
+                    <div class="h-[250px] w-full overflow-hidden relative border-b-[2px] border-title">
+                        <img src="${proj.image}" alt="${proj.title}" class="w-full h-full object-cover grayscale transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-title bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity gap-4 z-10 backdrop-blur-sm">
+                            <button onclick="editProject(${proj.id})" class="bg-white border-[2px] border-title text-title brutal-btn w-12 h-12 flex items-center justify-center hover:bg-primary"><i class="ri-edit-box-line text-xl"></i></button>
+                            <button onclick="deleteProject(${proj.id})" class="bg-white border-[2px] border-title text-title brutal-btn w-12 h-12 flex items-center justify-center hover:bg-red-400"><i class="ri-delete-bin-line text-xl"></i></button>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-1">
+                        <h3 class="font-bold text-xl mb-3 text-title">${proj.title}</h3>
+                        <p class="text-sm text-gray-700 leading-relaxed mb-6 line-clamp-2">${proj.desc}</p>
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            ${tagsHtml}
+                        </div>
+                    </div>
+                </article>
+            `}).join('');
+        }
+
+        // --- Utility: Modal & Toast Management ---
+
+        function showModal(modalId) {
+            const backdrop = document.getElementById('modal-backdrop');
+            const modal = document.getElementById(modalId);
+            
+            backdrop.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            
+            // Small delay to allow display:block to apply before animating opacity
+            setTimeout(() => {
+                backdrop.classList.add('opacity-100');
+                modal.classList.add('show');
+            }, 10);
+        }
+
+        function closeModals() {
+            const backdrop = document.getElementById('modal-backdrop');
+            const modals = document.querySelectorAll('.modal');
+            
+            backdrop.classList.remove('opacity-100');
+            modals.forEach(m => m.classList.remove('show'));
+            
+            // Wait for transition to finish
+            setTimeout(() => {
+                backdrop.classList.add('hidden');
+                modals.forEach(m => m.classList.add('hidden'));
+                
+                // Reset all forms
+                document.querySelectorAll('.modal form').forEach(form => form.reset());
+                document.querySelectorAll('.modal input[type="hidden"]').forEach(input => input.value = '');
+            }, 300);
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            const icon = document.getElementById('toast-icon');
+            
+            msgEl.textContent = message;
+            
+            icon.className = 'text-xl mr-2'; // reset
+            
+            if (type === 'success') {
+                icon.classList.add('ri-checkbox-circle-fill', 'text-primary');
+            } else if (type === 'error') {
+                icon.classList.add('ri-error-warning-fill', 'text-red-500');
+            } else if (type === 'info') {
+                icon.classList.add('ri-information-fill', 'text-blue-500');
+            }
+
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('show'), 10);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 3000);
+        }
+
+        // --- CRUD Operations ---
+
+        // Profile
+        function handleProfileSubmit(e) {
+            e.preventDefault();
+            // In a real app, send data to backend
+            showToast('Profile updated successfully');
+        }
+
+        // Skills
+        function openSkillModal(id = null) {
+            const title = document.getElementById('skill-modal-title');
+            if (id) {
+                title.textContent = 'Edit Skill';
+                const skill = state.skills.find(s => s.id === id);
+                document.getElementById('skill-id').value = skill.id;
+                document.getElementById('skill-name').value = skill.name;
+            } else {
+                title.textContent = 'Add Skill';
+                document.getElementById('skill-form').reset();
+                document.getElementById('skill-id').value = '';
+            }
+            showModal('skill-modal');
+        }
+
+        function saveSkill(e) {
+            e.preventDefault();
+            const id = document.getElementById('skill-id').value;
+            const name = document.getElementById('skill-name').value;
+            
+            if (id) {
+                const index = state.skills.findIndex(s => s.id == id);
+                state.skills[index].name = name;
+                showToast('Skill updated');
+            } else {
+                const newId = state.skills.length > 0 ? Math.max(...state.skills.map(s => s.id)) + 1 : 1;
+                state.skills.push({ id: newId, name });
+                showToast('Skill added');
+            }
+            
+            renderSkills();
+            updateDashboardStats();
+            closeModals();
+        }
+
+        function editSkill(id) { openSkillModal(id); }
+        function deleteSkill(id) {
+            if(confirm('Are you sure you want to delete this skill?')) {
+                state.skills = state.skills.filter(s => s.id !== id);
+                renderSkills();
+                updateDashboardStats();
+                showToast('Skill deleted');
+            }
+        }
+
+        // Tools
+        function openToolModal(id = null) {
+            const title = document.getElementById('tool-modal-title');
+            if (id) {
+                title.textContent = 'Edit Tool';
+                const tool = state.tools.find(t => t.id === id);
+                document.getElementById('tool-id').value = tool.id;
+                document.getElementById('tool-name').value = tool.name;
+                document.getElementById('tool-icon').value = tool.icon;
+                document.getElementById('tool-color').value = tool.color || '';
+            } else {
+                title.textContent = 'Add Tool';
+                document.getElementById('tool-form').reset();
+                document.getElementById('tool-id').value = '';
+            }
+            showModal('tool-modal');
+        }
+
+        function saveTool(e) {
+            e.preventDefault();
+            const id = document.getElementById('tool-id').value;
+            const toolData = {
+                name: document.getElementById('tool-name').value,
+                icon: document.getElementById('tool-icon').value,
+                color: document.getElementById('tool-color').value
+            };
+            
+            if (id) {
+                const index = state.tools.findIndex(t => t.id == id);
+                state.tools[index] = { ...state.tools[index], ...toolData };
+                showToast('Tool updated');
+            } else {
+                const newId = state.tools.length > 0 ? Math.max(...state.tools.map(t => t.id)) + 1 : 1;
+                state.tools.push({ id: newId, ...toolData });
+                showToast('Tool added');
+            }
+            
+            renderTools();
+            updateDashboardStats();
+            closeModals();
+        }
+
+        function editTool(id) { openToolModal(id); }
+        function deleteTool(id) {
+            if(confirm('Are you sure you want to delete this tool?')) {
+                state.tools = state.tools.filter(t => t.id !== id);
+                renderTools();
+                updateDashboardStats();
+                showToast('Tool deleted');
+            }
+        }
+
+        // Experience
+        function openExpModal(id = null) {
+            const title = document.getElementById('exp-modal-title');
+            if (id) {
+                title.textContent = 'Edit Experience';
+                const exp = state.experience.find(e => e.id === id);
+                document.getElementById('exp-id').value = exp.id;
+                document.getElementById('exp-loc').value = exp.location;
+                document.getElementById('exp-dur').value = exp.duration;
+                document.getElementById('exp-role').value = exp.role;
+                document.getElementById('exp-desc').value = exp.desc;
+            } else {
+                title.textContent = 'Add Experience';
+                document.getElementById('exp-form').reset();
+                document.getElementById('exp-id').value = '';
+            }
+            showModal('exp-modal');
+        }
+
+        function saveExp(e) {
+            e.preventDefault();
+            const id = document.getElementById('exp-id').value;
+            const expData = {
+                location: document.getElementById('exp-loc').value,
+                duration: document.getElementById('exp-dur').value,
+                role: document.getElementById('exp-role').value,
+                desc: document.getElementById('exp-desc').value
+            };
+            
+            if (id) {
+                const index = state.experience.findIndex(ex => ex.id == id);
+                state.experience[index] = { ...state.experience[index], ...expData };
+                showToast('Experience updated');
+            } else {
+                const newId = state.experience.length > 0 ? Math.max(...state.experience.map(ex => ex.id)) + 1 : 1;
+                state.experience.push({ id: newId, ...expData });
+                showToast('Experience added');
+            }
+            
+            renderExperience();
+            updateDashboardStats();
+            closeModals();
+        }
+
+        function editExp(id) { openExpModal(id); }
+        function deleteExp(id) {
+            if(confirm('Are you sure you want to delete this experience entry?')) {
+                state.experience = state.experience.filter(ex => ex.id !== id);
+                renderExperience();
+                updateDashboardStats();
+                showToast('Experience deleted');
+            }
+        }
+
+        // Education
+        function openEduModal(id = null) {
+            const title = document.getElementById('edu-modal-title');
+            if (id) {
+                title.textContent = 'Edit Education';
+                const edu = state.education.find(e => e.id === id);
+                document.getElementById('edu-id').value = edu.id;
+                document.getElementById('edu-year').value = edu.year;
+                document.getElementById('edu-degree').value = edu.degree;
+            } else {
+                title.textContent = 'Add Education';
+                document.getElementById('edu-form').reset();
+                document.getElementById('edu-id').value = '';
+            }
+            showModal('edu-modal');
+        }
+
+        function saveEdu(e) {
+            e.preventDefault();
+            const id = document.getElementById('edu-id').value;
+            const eduData = {
+                year: document.getElementById('edu-year').value,
+                degree: document.getElementById('edu-degree').value
+            };
+            
+            if (id) {
+                const index = state.education.findIndex(ed => ed.id == id);
+                state.education[index] = { ...state.education[index], ...eduData };
+                showToast('Education updated');
+            } else {
+                const newId = state.education.length > 0 ? Math.max(...state.education.map(ed => ed.id)) + 1 : 1;
+                state.education.push({ id: newId, ...eduData });
+                showToast('Education added');
+            }
+            
+            renderEducation();
+            closeModals();
+        }
+
+        function editEdu(id) { openEduModal(id); }
+        function deleteEdu(id) {
+            if(confirm('Are you sure you want to delete this education entry?')) {
+                state.education = state.education.filter(ed => ed.id !== id);
+                renderEducation();
+                showToast('Education deleted');
+            }
+        }
+
+        // Projects
+        function openProjectModal(id = null) {
+            const title = document.getElementById('project-modal-title');
+            if (id) {
+                title.textContent = 'Edit Project';
+                const proj = state.projects.find(p => p.id === id);
+                document.getElementById('proj-id').value = proj.id;
+                document.getElementById('proj-title').value = proj.title;
+                document.getElementById('proj-image').value = proj.image;
+                document.getElementById('proj-desc').value = proj.desc;
+                document.getElementById('proj-tags').value = proj.tags;
+            } else {
+                title.textContent = 'Add Project';
+                document.getElementById('project-form').reset();
+                document.getElementById('proj-id').value = '';
+            }
+            showModal('project-modal');
+        }
+
+        function saveProject(e) {
+            e.preventDefault();
+            const id = document.getElementById('proj-id').value;
+            const projData = {
+                title: document.getElementById('proj-title').value,
+                image: document.getElementById('proj-image').value,
+                desc: document.getElementById('proj-desc').value,
+                tags: document.getElementById('proj-tags').value
+            };
+            
+            if (id) {
+                const index = state.projects.findIndex(p => p.id == id);
+                state.projects[index] = { ...state.projects[index], ...projData };
+                showToast('Project updated');
+            } else {
+                const newId = state.projects.length > 0 ? Math.max(...state.projects.map(p => p.id)) + 1 : 1;
+                state.projects.push({ id: newId, ...projData });
+                showToast('Project added');
+            }
+            
+            renderProjects();
+            updateDashboardStats();
+            closeModals();
+        }
+
+        function editProject(id) { openProjectModal(id); }
+        function deleteProject(id) {
+            if(confirm('Are you sure you want to delete this project?')) {
+                state.projects = state.projects.filter(p => p.id !== id);
+                renderProjects();
+                updateDashboardStats();
+                showToast('Project deleted');
+            }
+        }
+
+    </script>
+</body>
+</html>

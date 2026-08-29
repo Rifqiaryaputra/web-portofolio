@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brutalist color system (from portfolio_website.html) */
+  --color-primary: hsl(90, 82%, 68%);
+  --color-primary-alt: hsl(90, 78%, 64%);
+  --color-title: hsl(0, 0%, 4%);
+  --color-black: hsl(227, 25%, 11%);
+  --color-paper: #f3f3f3;
+  --color-surface: #eaeaea;
+
+  /* Montserrat wired up via next/font in layout.tsx */
+  --font-sans: var(--font-montserrat), "Montserrat", ui-sans-serif, sans-serif;
+
+  /* Brutalist solid shadow */
+  --shadow-brutal: 4px 4px 0 0 rgba(0, 0, 0, 1);
+}
+
+:root {
+  --background: #eaeaea;
+  --foreground: hsl(0, 0%, 4%);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Dashed divider used in the Experience timeline */
+.dashed-divider {
+  background-image: linear-gradient(to bottom, black 50%, transparent 50%);
+  background-size: 2px 14px;
+  background-repeat: repeat-y;
+  width: 2px;
+}
+
+/* Tab content fade animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-in-out;
+}
+
+/* Hide scrollbar but keep scrolling (used by image carousels) */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

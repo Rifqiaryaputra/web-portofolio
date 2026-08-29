@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Experienced Frontend Developer portfolio showcasing professional projects, technical skills, work experience.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nia Loren - Resume Portfolio</title>
+
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <!-- Remix Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: 'hsl(90, 82%, 68%)',
+                        'primary-alt': 'hsl(90, 78%, 64%)',
+                        title: 'hsl(0, 0%, 4%)',
+                        black: 'hsl(227, 25%, 11%)',
+                        body: 'hsl(260, 9%, 94%)',
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for specific behaviors and animations -->
+    <style>
+        /* Base styles matching the provided CSS variables */
+        body {
+            background-color: #EAEAEA; /* Slightly darker gray for the background */
+            color: var(--title-color);
+        }
+
+        /* Tab Content Animation Logic */
+        [data-content] {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        [data-content].main-active {
+            display: block;
+        }
+
+        [data-content].show {
+            opacity: 1;
+        }
+
+        /* Dashed Divider Line */
+        .dashed-divider {
+            background-image: linear-gradient(to bottom, black 50%, transparent 50%);
+            background-size: 2px 14px;
+            background-repeat: repeat-y;
+            width: 2px;
+        }
+    </style>
+</head>
+<body class="text-title font-sans antialiased text-[15px] sm:text-base">
+
+    <!-- Main Container - Now acting as the "Paper" -->
+    <main class="max-w-[1120px] mx-auto my-12 bg-[#F3F3F3] shadow-[0_10px_40px_rgba(0,0,0,0.03)] px-8 py-16 md:px-16 md:py-24 overflow-hidden relative">
+        
+        <!--============ PROFILE ============-->
+        <section class="mb-16 md:mb-24">
+            <div class="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-12 items-center">
+                
+                <!-- Profile Info -->
+                <div>
+                    <p class="text-xl md:text-2xl mb-1">Hello I'm</p>
+                    <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-8">Nia Loren</h1>
+                    
+                    <!-- Toggle Buttons & Download CV -->
+                    <div class="flex flex-wrap items-center gap-4 mb-12">
+                        <!-- Toggle Buttons -->
+                        <div class="inline-flex rounded-[2rem] border-[2px] border-title p-1.5 shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-white relative">
+                            <button data-target="#info" class="tab-btn main-active bg-primary text-title px-6 md:px-8 py-2 md:py-2.5 rounded-full font-medium cursor-pointer transition-colors duration-300">Information</button>
+                            <button data-target="#projects" class="tab-btn text-gray-500 bg-transparent px-6 md:px-8 py-2 md:py-2.5 rounded-full font-medium cursor-pointer hover:text-title transition-colors duration-300">Projects</button>
+                        </div>
+
+                        <!-- Download CV Button -->
+                        <a href="#download" onclick="alert('Downloading CV simulation...'); return false;" class="inline-flex items-center gap-2 px-6 py-3 rounded-[2rem] border-[2px] border-title font-medium text-title bg-white shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:bg-primary transition-all duration-300 text-sm md:text-base">
+                            <i class="ri-download-line text-lg"></i> Download CV
+                        </a>
+                    </div>
+
+                    <!-- Profile Description -->
+                    <div>
+                        <h2 class="bg-primary text-title inline-block px-3 py-1 font-medium mb-4 text-sm md:text-base">Profile</h2>
+                        <p class="text-gray-700 leading-relaxed text-sm md:text-[15px]">
+                            Creative strategist with an insatiable curiosity who merges design, culture, and brand psychology. I help startups project a bold image, connect with their audience, and create an unforgettable experience. I have over six years of experience building brand universes that capture attention and leave a lasting impression.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Profile Image -->
+                <div class="flex justify-center md:justify-end relative mt-10 md:mt-0 px-8">
+                    <div class="relative w-[280px] h-[360px] md:w-[320px] md:h-[420px]">
+                        <!-- Dashed Border -->
+                        <div class="absolute inset-[-1.5rem] border-[2px] border-dashed border-title transform rotate-[4deg] z-0"></div>
+                        <!-- Actual Image -->
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Nia Loren" class="relative z-10 w-full h-full object-cover grayscale">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--============ MAIN CONTENT AREA ============-->
+        <div class="main__area">
+            
+            <!--============ INFORMATION TAB ============-->
+            <div data-content id="info" class="main-active show">
+                <div class="grid grid-cols-1 lg:grid-cols-[280px_auto_1fr] gap-10 lg:gap-16">
+                    
+                    <!-- Left Column (Skills & Tools) -->
+                    <div class="flex flex-col gap-12">
+                        <!-- Skills -->
+                        <section class="skills">
+                            <h2 class="bg-primary text-title inline-block px-3 py-1 font-medium mb-6 text-sm md:text-base">Skills</h2>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 text-sm md:text-[15px]">
+                                <li>Brand Identity Design</li>
+                                <li>Content Strategy.</li>
+                                <li>Social Media Campaigns.</li>
+                                <li>Copywriting.</li>
+                                <li>Figma, Canva, Adobe CC.</li>
+                                <li>Trend Forecasting.</li>
+                                <li>Motion Graphics (After Effects).</li>
+                                <li>Creative Direction.</li>
+                            </ul>
+                        </section>
+
+                        <!-- Tools -->
+                        <section class="tools">
+                            <h2 class="bg-primary text-title inline-block px-3 py-1 font-medium mb-6 text-sm md:text-base">Tools & Technologies</h2>
+                            <ul class="space-y-4 text-sm md:text-[15px] font-medium text-gray-800">
+                                <li class="flex items-center gap-3"><i class="ri-reactjs-line text-xl text-[#61DAFB]"></i> React</li>
+                                <li class="flex items-center gap-3"><i class="ri-javascript-fill text-xl text-[#F7DF1E]"></i> JavaScript</li>
+                                <li class="flex items-center gap-3"><i class="ri-github-fill text-xl"></i> GitHub</li>
+                                <li class="flex items-center gap-3"><i class="ri-git-merge-line text-xl text-[#F05032]"></i> Git</li>
+                                <li class="flex items-center gap-3"><i class="ri-database-2-fill text-xl text-[#336791]"></i> PostgreSQL</li>
+                                <li class="flex items-center gap-3"><i class="ri-nodejs-line text-xl text-[#339933]"></i> Node Js</li>
+                                <li class="flex items-center gap-3"><i class="ri-pen-nib-fill text-xl text-[#FF9A00]"></i> Ilustrator</li>
+                                <li class="flex items-center gap-3"><i class="ri-figma-fill text-xl text-[#F24E1E]"></i> Figma</li>
+                            </ul>
+                        </section>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="hidden lg:block border-l-2 border-dashed border-title opacity-20 mx-auto"></div>
+        
+                    <!-- Right Column (Experience & Education) -->
+                    <div class="flex flex-col gap-12">
+                        <!-- Experience -->
+                        <section class="experience">
+                            <h2 class="bg-primary text-title inline-block px-3 py-1 font-medium mb-8 text-sm md:text-base">Experience</h2>
+                            
+                            <div class="flex flex-col gap-8">
+                                <!-- Job 1 -->
+                                <div class="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-4 sm:gap-8 text-sm md:text-[15px]">
+                                    <div class="font-bold text-gray-800 leading-snug">Remote / <br> 2021 - Present</div>
+                                    <div>
+                                        <h3 class="font-bold text-base mb-3">Brand Strategist / Freelance</h3>
+                                        <ul class="list-disc list-outside ml-4 text-gray-700 space-y-2">
+                                            <li>Crafted full brand identities for 15+ startups in skincare, wellness, and tech.</li>
+                                            <li>Increased engagement by 300% on average via social-first strategy revamps.</li>
+                                            <li>Collaborated with copywriters, motion designers, and dev teams for seamless rollouts.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Job 2 -->
+                                <div class="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-4 sm:gap-8 text-sm md:text-[15px]">
+                                    <div class="font-bold text-gray-800 leading-snug">NYC / <br> 2018 - 2021</div>
+                                    <div>
+                                        <h3 class="font-bold text-base mb-3">Creative Lead / Glitch Studio</h3>
+                                        <ul class="list-disc list-outside ml-4 text-gray-700 space-y-2">
+                                            <li>Crafted full brand identities for 15+ startups in skincare, wellness, and tech.</li>
+                                            <li>Increased engagement by 300% on average via social-first strategy revamps.</li>
+                                            <li>Collaborated with copywriters, motion designers, and dev teams for seamless rollouts.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Education -->
+                        <section class="education pt-4">
+                            <h2 class="bg-primary text-title inline-block px-3 py-1 font-medium mb-8 text-sm md:text-base">Education</h2>
+                            
+                            <div class="flex flex-col gap-6">
+                                <div class="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-2 sm:gap-8 text-sm md:text-[15px]">
+                                    <div class="font-bold text-gray-800">Class of 2016</div>
+                                    <div class="font-medium">Systems Engineering - University</div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-2 sm:gap-8 text-sm md:text-[15px]">
+                                    <div class="font-bold text-gray-800">Class of 2022</div>
+                                    <div class="font-medium">Web Programming - Programming school</div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-2 sm:gap-8 text-sm md:text-[15px]">
+                                    <div class="font-bold text-gray-800">Class of 2024</div>
+                                    <div class="font-medium">Usability (UX/UI) - Design school</div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <!--============ PROJECTS TAB ============-->
+            <section data-content id="projects">
+                <h2 class="bg-primary text-title inline-block px-3 py-1 font-medium mb-10 text-sm md:text-base">Jobs</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    <!-- Project Card 1 -->
+                    <article class="group cursor-pointer flex flex-col h-full">
+                        <div class="overflow-hidden mb-5">
+                            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Modern Design Project" class="w-full h-[250px] object-cover grayscale transition-transform duration-500 group-hover:scale-105">
+                        </div>
+                        <h3 class="font-bold text-lg mb-2 text-title">Modern Design Project</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed mb-4">
+                            Professional website for a company, using HTML, CSS, JavaScript, Gsap, Figma, Database and others.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-5">
+                            <span class="text-xs font-medium px-2.5 py-1 border border-gray-300 rounded text-gray-700">HTML</span>
+                            <span class="text-xs font-medium px-2.5 py-1 border border-gray-300 rounded text-gray-700">CSS</span>
+                            <span class="text-xs font-medium px-2.5 py-1 border border-gray-300 rounded text-gray-700">JS</span>
+                        </div>
+                        <div class="mt-auto">
+                            <span class="inline-flex items-center gap-1 text-sm font-bold text-title group-hover:text-primary transition-colors">
+                                Lihat Detail <i class="ri-arrow-right-line text-lg"></i>
+                            </span>
+                        </div>
+                    </article>
+
+                    <!-- Project Card 2 -->
+                    <article class="group cursor-pointer flex flex-col h-full">
+                        <div class="overflow-hidden mb-5">
+                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Modern Design Project" class="w-full h-[250px] object-cover grayscale transition-transform duration-500 group-hover:scale-105">
+                        </div>
+                        <h3 class="font-bold text-lg mb-2 text-title">Modern Design Project</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed mb-4">
+                            Professional website for a company, using HTML, CSS, JavaScript, Gsap, Figma, Database and others.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-5">
+                            <span class="text-xs font-medium px-2.5 py-1 border border-gray-300 rounded text-gray-700">React</span>
+                            <span class="text-xs font-medium px-2.5 py-1 border border-gray-300 rounded text-gray-700">Node.js</span>
+                            <span class="text-xs font-medium px-2.5 py-1 border border-gray-300 rounded text-gray-700">Figma</span>
+                        </div>
+                        <div class="mt-auto">
+                            <span class="inline-flex items-center gap-1 text-sm font-bold text-title group-hover:text-primary transition-colors">
+                                Lihat Detail <i class="ri-arrow-right-line text-lg"></i>
+                            </span>
+                        </div>
+                    </article>
+
+                    <!-- Project Card 3 -->
+                    <article class="group cursor-pointer flex flex-col h-full">
+                        <div class="overflow-hidden mb-5">
+                            <img src="https://images.unsplash.com/photo-1522199755839-a2bacb67c546?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Modern Design Project" class="w-full h-[250px] object-cover grayscale transition-transform duration-500 group-hover:scale-105">
+                        </div>
+                        <h3 class="font-bold text-lg mb-2 text-title">Modern Design Project</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed mb-4">
+                            Professional website for a company, using HTML, CSS, JavaScript, Gsap, Figma, Database and others.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-5">
+                            <span class="text-xs font-medium px-2.5 py-1 border border-gray-300 rounded text-gray-700">Vue</span>
+                            <span class="text-xs font-medium px-2.5 py-1 border border-gray-300 rounded text-gray-700">Tailwind</span>
+                            <span class="text-xs font-medium px-2.5 py-1 border border-gray-300 rounded text-gray-700">Supabase</span>
+                        </div>
+                        <div class="mt-auto">
+                            <span class="inline-flex items-center gap-1 text-sm font-bold text-title group-hover:text-primary transition-colors">
+                                Lihat Detail <i class="ri-arrow-right-line text-lg"></i>
+                            </span>
+                        </div>
+                    </article>
+
+                    <!-- Project Card 4 -->
+                    <article class="group cursor-pointer flex flex-col h-full">
+                        <div class="overflow-hidden mb-5">
+                            <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Modern Design Project" class="w-full h-[250px] object-cover grayscale transition-transform duration-500 group-hover:scale-105">
+                        </div>
+                        <h3 class="font-bold text-lg mb-2 text-title">Modern Design Project</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed mb-4">
+                            Professional website for a company, using HTML, CSS, JavaScript, Gsap, Figma, Database and others.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-5">
+                            <span class="text-xs font-medium px-2.5 py-1 border border-gray-300 rounded text-gray-700">Next.js</span>
+                            <span class="text-xs font-medium px-2.5 py-1 border border-gray-300 rounded text-gray-700">TypeScript</span>
+                            <span class="text-xs font-medium px-2.5 py-1 border border-gray-300 rounded text-gray-700">PostgreSQL</span>
+                        </div>
+                        <div class="mt-auto">
+                            <span class="inline-flex items-center gap-1 text-sm font-bold text-title group-hover:text-primary transition-colors">
+                                Lihat Detail <i class="ri-arrow-right-line text-lg"></i>
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </div>
+
+        <!--============ FOOTER ============-->
+        <footer class="mt-24 pt-10 flex flex-wrap justify-center lg:justify-between items-center gap-6 lg:gap-4 border-t border-gray-300">
+            <a href="mailto:email@domain.com" class="flex items-center gap-2 font-medium text-sm hover:text-primary transition-colors text-gray-800">
+                <i class="ri-mail-line text-xl"></i> email@domain.com
+            </a>
+            <div class="flex items-center gap-2 font-medium text-sm text-gray-800">
+                <i class="ri-map-pin-line text-xl"></i> Yogyakarta
+            </div>
+            <a href="https://wa.me/6282312349876" target="_blank" class="flex items-center gap-2 font-medium text-sm hover:text-primary transition-colors text-gray-800">
+                <i class="ri-whatsapp-line text-xl"></i> +62 823 1234 9876
+            </a>
+            <a href="https://linkedin.com/in/rifqi-arya-putra" target="_blank" class="flex items-center gap-2 font-medium text-sm hover:text-primary transition-colors text-gray-800">
+                <i class="ri-linkedin-box-line text-xl"></i> linkedin.com/in/rifqi-arya-putra
+            </a>
+        </footer>
+        
+    </main>
+
+    <!--=============== MAIN JS ===============-->
+    <script>
+        /*=============== TABS BUTTONS WITH SMOOTH ANIMATION ===============*/ 
+        const tabs = document.querySelectorAll('[data-target]'),
+              tabContents = document.querySelectorAll('[data-content]')
+
+        tabs.forEach((tab) => {
+           tab.addEventListener('click', () => {
+              const targetSelector = tab.dataset.target,
+                    targetContent = document.querySelector(targetSelector),
+                    currentContent = document.querySelector('[data-content].main-active')
+
+              // Avoid re-triggering if the same tab is clicked
+              if(targetContent === currentContent) return
+
+              // Switch active button styling
+              tabs.forEach((t) => {
+                 t.classList.remove('main-active', 'bg-primary', 'text-title')
+                 t.classList.add('text-gray-500', 'bg-transparent')
+              })
+              tab.classList.remove('text-gray-500', 'bg-transparent')
+              tab.classList.add('main-active', 'bg-primary', 'text-title')
+
+              // Fade out current content
+              currentContent.classList.remove('show')
+
+              currentContent.addEventListener('transitionend', function handler(){
+                 currentContent.classList.remove('main-active')
+                 currentContent.removeEventListener('transitionend', handler)
+
+                 // Fade in new content
+                 targetContent.classList.add('main-active')
+
+                 requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                       targetContent.classList.add('show')
+                    })
+                 })
+              }, { once: true })
+           })
+        })
+
+        /*=============== INITIAL FADE IN ON LOAD ===============*/
+        window.addEventListener('load', () => {
+           const initialContent = document.querySelector('[data-content].main-active')
+           requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                 initialContent.classList.add('show')
+              })
+           })
+        })
+    </script>
+</body>
+</html>
