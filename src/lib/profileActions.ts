@@ -29,7 +29,7 @@ export type ProfileInput = {
   bio: string;
   email: string;
   github_url: string | null;
-  whatsapp: string;
+  instagram: string;
   linkedin: string;
   avatar_url: string | null;
   favicon_url: string | null;

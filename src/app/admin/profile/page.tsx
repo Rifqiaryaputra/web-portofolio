@@ -21,7 +21,7 @@ const EMPTY: FormState = {
   bio: "",
   email: "",
   github_url: null,
-  whatsapp: "",
+  instagram: "",
   linkedin: "",
 };
 
@@ -53,7 +53,7 @@ export default function AdminProfilePage() {
             bio: data.bio ?? "",
             email: data.email ?? "",
             github_url: data.github_url ?? null,
-            whatsapp: data.whatsapp ?? "",
+            instagram: data.instagram ?? "",
             linkedin: data.linkedin ?? "",
           });
           setAvatarPreview(data.avatar_url || DEFAULT_AVATAR);
@@ -263,14 +263,14 @@ export default function AdminProfilePage() {
 
                 <div>
                   <label className="block text-sm font-bold text-title mb-2">
-                    WhatsApp Number
+                    Instagram
                   </label>
                   <input
                     type="text"
-                    value={form.whatsapp}
-                    onChange={set("whatsapp")}
+                    value={form.instagram}
+                    onChange={set("instagram")}
                     className={inputCls}
-                    placeholder="+62 823 1234 9876"
+                    placeholder="username or full URL"
                   />
                 </div>
 

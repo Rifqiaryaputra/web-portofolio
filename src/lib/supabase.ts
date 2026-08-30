@@ -76,7 +76,7 @@ export type Profile = {
   cv_url?: string | null;
   email?: string | null;
   github_url?: string | null;
-  whatsapp?: string | null;
+  instagram?: string | null;
   linkedin?: string | null;
   created_at?: string | null;
   updated_at?: string | null;
