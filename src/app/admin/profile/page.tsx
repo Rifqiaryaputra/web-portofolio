@@ -17,7 +17,6 @@ type FormState = Omit<ProfileInput, "avatar_url" | "cv_url" | "favicon_url">;
 const EMPTY: FormState = {
   name: "",
   greeting: "",
-  role: "",
   bio: "",
   email: "",
   github_url: null,
@@ -49,7 +48,6 @@ export default function AdminProfilePage() {
           setForm({
             name: data.name ?? "",
             greeting: data.greeting ?? "",
-            role: data.role ?? "",
             bio: data.bio ?? "",
             email: data.email ?? "",
             github_url: data.github_url ?? null,
@@ -177,19 +175,6 @@ export default function AdminProfilePage() {
                     required
                     className={inputCls}
                     placeholder="Nia Loren"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold text-title mb-2">
-                    Professional Title
-                  </label>
-                  <input
-                    type="text"
-                    value={form.role}
-                    onChange={set("role")}
-                    className={inputCls}
-                    placeholder="Creative strategist"
                   />
                 </div>
 

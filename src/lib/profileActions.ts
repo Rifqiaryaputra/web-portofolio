@@ -25,7 +25,6 @@ export async function uploadProfileFile(
 export type ProfileInput = {
   name: string;
   greeting: string;
-  role: string;
   bio: string;
   email: string;
   github_url: string | null;

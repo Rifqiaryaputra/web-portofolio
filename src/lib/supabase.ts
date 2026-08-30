@@ -69,7 +69,6 @@ export type Profile = {
   id: number | string;
   name: string;
   greeting?: string | null;
-  role?: string | null;
   bio?: string | null;
   avatar_url?: string | null;
   favicon_url?: string | null;
