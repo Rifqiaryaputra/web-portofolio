@@ -131,19 +131,19 @@ async function queryTable<T>(
 }
 
 export async function getSkills(): Promise<Skill[]> {
-  return queryTable<Skill>("skills", "id");
+  return queryTable<Skill>("skills", "created_at", false);
 }
 
 export async function getTools(): Promise<Tool[]> {
-  return queryTable<Tool>("tools", "id");
+  return queryTable<Tool>("tools", "created_at", false);
 }
 
 export async function getExperiences(): Promise<Experience[]> {
-  return queryTable<Experience>("experiences", "id");
+  return queryTable<Experience>("experiences", "id", false);
 }
 
 export async function getEducation(): Promise<Education[]> {
-  return queryTable<Education>("education", "id");
+  return queryTable<Education>("education", "year", false);
 }
 
 export async function getProjects(): Promise<Project[]> {

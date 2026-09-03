@@ -5,6 +5,7 @@ import type { Award } from "@/lib/supabase";
 
 export default function AwardsSection({ awards }: { awards: Award[] }) {
   const [viewing, setViewing] = useState<Award | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     if (!viewing) return;
@@ -25,7 +26,7 @@ export default function AwardsSection({ awards }: { awards: Award[] }) {
         Honors &amp; Awards
       </h2>
       <ul className="space-y-4 text-sm md:text-[15px]">
-        {awards.map((award) => (
+        {(isExpanded ? awards : awards.slice(0, 3)).map((award) => (
           <li key={award.id}>
             <div className="font-medium">
               {award.image_url ? (
@@ -57,6 +58,18 @@ export default function AwardsSection({ awards }: { awards: Award[] }) {
           </li>
         ))}
       </ul>
+
+      {awards.length > 3 && (
+        <button
+          type="button"
+          onClick={() => setIsExpanded((v) => !v)}
+          className="text-sm font-semibold text-black hover:text-green-500 transition-colors mt-4 flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
+        >
+          {isExpanded
+            ? "Show less ➔"
+            : `Show all ${awards.length} awards ➔`}
+        </button>
+      )}
 
       {viewing?.image_url ? (
         <>
