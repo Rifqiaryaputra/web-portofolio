@@ -151,11 +151,11 @@ export async function getProjects(): Promise<Project[]> {
 }
 
 export async function getAwards(): Promise<Award[]> {
-  return queryTable<Award>("awards", "id");
+  return queryTable<Award>("awards", "year", false);
 }
 
 export async function getCertifications(): Promise<Certification[]> {
-  return queryTable<Certification>("certifications", "id");
+  return queryTable<Certification>("certifications", "date", false);
 }
 
 export async function getProjectById(

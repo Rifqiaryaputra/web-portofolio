@@ -22,12 +22,11 @@ export default function AwardsSection({ awards }: { awards: Award[] }) {
   return (
     <section className="awards pt-4">
       <h2 className="bg-primary text-title inline-block px-3 py-1 font-medium mb-6 text-sm md:text-base">
-        Awards
+        Honors &amp; Awards
       </h2>
       <ul className="space-y-4 text-sm md:text-[15px]">
         {awards.map((award) => (
-          <li key={award.id} className="flex items-start gap-3">
-            <i className="ri-trophy-fill text-yellow-500 text-xl mt-0.5"></i>
+          <li key={award.id}>
             <div className="font-medium">
               {award.image_url ? (
                 <button
@@ -84,7 +83,7 @@ export default function AwardsSection({ awards }: { awards: Award[] }) {
                   <i className="ri-close-line"></i>
                 </button>
               </div>
-              <div className="p-4 md:p-6 bg-white max-h-[70vh] overflow-auto flex items-center justify-center">
+              <div className="p-4 md:p-6 bg-white max-h-[70vh] overflow-auto flex flex-col items-center justify-center">
                 {isPdf ? (
                   <iframe
                     src={viewing.image_url}
@@ -98,6 +97,16 @@ export default function AwardsSection({ awards }: { awards: Award[] }) {
                     className="max-w-full max-h-full object-contain border-2 border-title"
                   />
                 )}
+                {viewing.url ? (
+                  <a
+                    href={viewing.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex items-center gap-2 bg-primary text-title font-bold px-5 py-2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                  >
+                    Verify Link ➔
+                  </a>
+                ) : null}
               </div>
             </div>
           </div>

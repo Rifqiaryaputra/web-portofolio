@@ -109,7 +109,7 @@ export default function CertificationsSection({
                   <i className="ri-close-line"></i>
                 </button>
               </div>
-              <div className="p-4 md:p-6 bg-white max-h-[70vh] overflow-auto flex items-center justify-center">
+              <div className="p-4 md:p-6 bg-white max-h-[70vh] overflow-auto flex flex-col items-center justify-center">
                 {isPdf ? (
                   <iframe
                     src={viewing.image_url}
@@ -123,6 +123,16 @@ export default function CertificationsSection({
                     className="max-w-full max-h-full object-contain border-2 border-title"
                   />
                 )}
+                {viewing.url ? (
+                  <a
+                    href={viewing.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex items-center gap-2 bg-primary text-title font-bold px-5 py-2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                  >
+                    Verify Link ➔
+                  </a>
+                ) : null}
               </div>
             </div>
           </div>
