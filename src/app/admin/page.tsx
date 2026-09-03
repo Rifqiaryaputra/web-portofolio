@@ -4,16 +4,28 @@ export const revalidate = 60;
 
 export default async function AdminDashboard() {
   let toolsCount = 0;
+  let awardsCount = 0;
+  let certsCount = 0;
   if (supabase) {
     const { count, error } = await supabase
       .from("tools")
       .select("*", { count: "exact", head: true });
     if (!error && count != null) toolsCount = count;
+
+    const awards = await supabase
+      .from("awards")
+      .select("*", { count: "exact", head: true });
+    if (!awards.error && awards.count != null) awardsCount = awards.count;
+
+    const certs = await supabase
+      .from("certifications")
+      .select("*", { count: "exact", head: true });
+    if (!certs.error && certs.count != null) certsCount = certs.count;
   }
 
   return (
     <section className="max-w-[1120px] mx-auto">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
         <div className="bg-paper border-[2px] border-title p-5">
           <div className="flex items-center justify-between">
             <div>
@@ -68,6 +80,38 @@ export default async function AdminDashboard() {
             </div>
             <div className="h-12 w-12 rounded-full bg-white border-[2px] border-title flex items-center justify-center shadow-brutal">
               <i className="ri-terminal-window-line text-xl text-title"></i>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-paper border-[2px] border-title p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-600 text-sm font-bold mb-1">
+                Total Awards
+              </p>
+              <h3 className="text-4xl font-bold text-title">
+                {awardsCount || 0}
+              </h3>
+            </div>
+            <div className="h-12 w-12 rounded-full bg-primary border-[2px] border-title flex items-center justify-center shadow-brutal">
+              <i className="ri-trophy-line text-xl text-title"></i>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-paper border-[2px] border-title p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-600 text-sm font-bold mb-1">
+                Total Certifications
+              </p>
+              <h3 className="text-4xl font-bold text-title">
+                {certsCount || 0}
+              </h3>
+            </div>
+            <div className="h-12 w-12 rounded-full bg-white border-[2px] border-title flex items-center justify-center shadow-brutal">
+              <i className="ri-medal-line text-xl text-title"></i>
             </div>
           </div>
         </div>
