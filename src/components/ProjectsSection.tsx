@@ -31,7 +31,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                     "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80"
                   }
                   alt={project.title}
-                  className="w-full h-[250px] object-cover grayscale transition-transform duration-500 group-hover:scale-105 group-hover:grayscale-0"
+                  className="w-full h-[250px] object-cover grayscale-0 md:grayscale transition-all duration-500 group-hover:scale-105 md:hover:grayscale-0"
                 />
               </div>
               <h3 className="font-bold text-lg mb-2 text-title">{project.title}</h3>

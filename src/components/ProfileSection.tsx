@@ -43,7 +43,7 @@ export default function ProfileSection({
               <img
                 src={resolveFileUrl(profile.avatar_url)}
                 alt={profile.name}
-                className="relative z-10 w-full h-full object-cover grayscale transition-all duration-500 hover:grayscale-0"
+                className="relative z-10 w-full h-full object-cover grayscale-0 md:grayscale transition-all duration-500 md:hover:grayscale-0"
               />
             ) : (
               <div className="relative z-10 w-full h-full border-[2px] border-title bg-white flex items-center justify-center">
