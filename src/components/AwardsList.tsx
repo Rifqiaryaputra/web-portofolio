@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import type { Award } from "@/lib/supabase";
 
-export default function AwardsSection({ awards }: { awards: Award[] }) {
+export default function AwardsList({ awards }: { awards: Award[] }) {
   const [viewing, setViewing] = useState<Award | null>(null);
 
   useEffect(() => {
@@ -16,24 +15,41 @@ export default function AwardsSection({ awards }: { awards: Award[] }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [viewing]);
 
-  if (awards.length === 0) return null;
-
   const isPdf = viewing?.image_url ? /\.pdf($|\?)/i.test(viewing.image_url) : false;
 
   return (
-    <section className="awards pt-4">
-      <h2 className="bg-primary text-title inline-block px-3 py-1 font-medium mb-6 text-sm md:text-base">
-        Honors &amp; Awards
-      </h2>
-      <ul className="space-y-4 text-sm md:text-[15px]">
-        {awards.slice(0, 3).map((award) => (
-          <li key={award.id}>
-            <div className="font-medium">
+    <>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
+        {awards.map((award) => (
+          <div key={award.id} className="flex flex-row items-start gap-4 w-full">
+            <div className="flex-shrink-0">
               {award.image_url ? (
                 <button
                   type="button"
                   onClick={() => setViewing(award)}
-                  className="font-bold text-black hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-0 text-left"
+                  className="w-32 md:w-48 h-24 md:h-32 flex-shrink-0 object-cover border-2 border-black cursor-pointer p-0 bg-transparent"
+                  aria-label={`View ${award.title} image`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={award.image_url}
+                    alt={award.title}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ) : (
+                <div className="w-32 md:w-48 h-24 md:h-32 border-2 border-black flex items-center justify-center bg-gray-100">
+                  <i className="ri-image-line text-2xl text-title"></i>
+                </div>
+              )}
+            </div>
+
+            <div className="min-w-0">
+              {award.image_url ? (
+                <button
+                  type="button"
+                  onClick={() => setViewing(award)}
+                  className="font-bold text-black hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-0 text-left text-sm md:text-base"
                 >
                   {award.title}
                 </button>
@@ -42,31 +58,22 @@ export default function AwardsSection({ awards }: { awards: Award[] }) {
                   href={award.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-bold text-black hover:text-primary transition-colors"
+                  className="font-bold text-black hover:text-primary transition-colors text-sm md:text-base"
                 >
                   {award.title}
                 </a>
               ) : (
-                <span className="font-bold">{award.title}</span>
+                <span className="font-bold text-sm md:text-base">{award.title}</span>
               )}
               {award.issuer || award.year ? (
-                <div className="text-gray-500">
+                <div className="text-gray-500 text-sm md:text-[15px]">
                   {[award.issuer, award.year].filter(Boolean).join(" - ")}
                 </div>
               ) : null}
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
-
-      {awards.length > 3 && (
-        <Link
-          href="/awards"
-          className="text-sm font-semibold text-black hover:text-green-500 transition-colors mt-4 flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
-        >
-          {`Show all ${awards.length} awards ➔`}
-        </Link>
-      )}
+      </div>
 
       {viewing?.image_url ? (
         <>
@@ -122,6 +129,6 @@ export default function AwardsSection({ awards }: { awards: Award[] }) {
           </div>
         </>
       ) : null}
-    </section>
+    </>
   );
 }
