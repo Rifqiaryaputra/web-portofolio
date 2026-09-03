@@ -65,6 +65,30 @@ export type Project = {
   sort_order?: number | null;
 };
 
+export type Award = {
+  id: number | string;
+  title: string;
+  issuer?: string | null;
+  year?: string | null;
+  url?: string | null;
+  image_url?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  sort_order?: number | null;
+};
+
+export type Certification = {
+  id: number | string;
+  title: string;
+  issuer?: string | null;
+  date?: string | null;
+  url?: string | null;
+  image_url?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  sort_order?: number | null;
+};
+
 export type Profile = {
   id: number | string;
   name: string;
@@ -124,6 +148,14 @@ export async function getEducation(): Promise<Education[]> {
 
 export async function getProjects(): Promise<Project[]> {
   return queryTable<Project>("projects", "created_at", false);
+}
+
+export async function getAwards(): Promise<Award[]> {
+  return queryTable<Award>("awards", "id");
+}
+
+export async function getCertifications(): Promise<Certification[]> {
+  return queryTable<Certification>("certifications", "id");
 }
 
 export async function getProjectById(

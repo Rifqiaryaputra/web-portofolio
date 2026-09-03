@@ -10,6 +10,8 @@ const NAV_ITEMS = [
   { href: "/admin/skills", label: "Skills & Tools", icon: "ri-tools-line" },
   { href: "/admin/experiences", label: "Experience", icon: "ri-briefcase-4-line" },
   { href: "/admin/education", label: "Education", icon: "ri-book-read-line" },
+  { href: "/admin/awards", label: "Awards", icon: "ri-trophy-line" },
+  { href: "/admin/certifications", label: "Certifications", icon: "ri-award-line" },
   { href: "/admin/projects", label: "Projects", icon: "ri-macbook-line" },
 ];
 

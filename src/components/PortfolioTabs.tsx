@@ -7,14 +7,18 @@ import type {
   Tool,
   Experience,
   Education,
+  Award,
+  Certification,
   Project,
   Profile,
 } from "@/lib/supabase";
 import { resolveFileUrl } from "@/lib/storage";
 import SkillsSection from "./SkillsSection";
 import ToolsSection from "./ToolsSection";
+import AwardsSection from "./AwardsSection";
 import ExperienceSection from "./ExperienceSection";
 import EducationSection from "./EducationSection";
+import CertificationsSection from "./CertificationsSection";
 import ProjectsSection from "./ProjectsSection";
 import ProfileSection from "./ProfileSection";
 
@@ -27,6 +31,8 @@ export default function PortfolioTabs({
   tools,
   experiences,
   education,
+  awards,
+  certifications,
   projects,
 }: {
   initialTab: Tab;
@@ -35,6 +41,8 @@ export default function PortfolioTabs({
   tools: Tool[];
   experiences: Experience[];
   education: Education[];
+  awards: Award[];
+  certifications: Certification[];
   projects: Project[];
 }) {
   const router = useRouter();
@@ -116,19 +124,21 @@ export default function PortfolioTabs({
             key="info"
             className="animate-fade-in grid grid-cols-1 lg:grid-cols-[280px_auto_1fr] gap-10 lg:gap-16"
           >
-            {/* Left Column (Skills & Tools) */}
+            {/* Left Column (Skills, Tools & Awards) */}
             <div className="flex flex-col gap-12">
               <SkillsSection skills={skills} />
               <ToolsSection tools={tools} />
+              <AwardsSection awards={awards} />
             </div>
 
             {/* Divider */}
             <div className="hidden lg:block border-l-2 border-dashed border-title opacity-20 mx-auto"></div>
 
-            {/* Right Column (Experience & Education) */}
+            {/* Right Column (Experience, Education & Certifications) */}
             <div className="flex flex-col gap-12">
               <ExperienceSection experiences={experiences} />
               <EducationSection education={education} />
+              <CertificationsSection certifications={certifications} />
             </div>
           </div>
         ) : (

@@ -4,6 +4,8 @@ import {
   getTools,
   getExperiences,
   getEducation,
+  getAwards,
+  getCertifications,
   getProjects,
 } from "@/lib/supabase";
 import PortfolioTabs from "@/components/PortfolioTabs";
@@ -17,15 +19,25 @@ export default async function Home({
   searchParams: Promise<{ tab?: string }>;
 }) {
   const { tab } = await searchParams;
-  const [profile, skills, tools, experiences, education, projects] =
-    await Promise.all([
-      getProfile(),
-      getSkills(),
-      getTools(),
-      getExperiences(),
-      getEducation(),
-      getProjects(),
-    ]);
+  const [
+    profile,
+    skills,
+    tools,
+    experiences,
+    education,
+    awards,
+    certifications,
+    projects,
+  ] = await Promise.all([
+    getProfile(),
+    getSkills(),
+    getTools(),
+    getExperiences(),
+    getEducation(),
+    getAwards(),
+    getCertifications(),
+    getProjects(),
+  ]);
 
   if (!profile) return null;
 
@@ -38,6 +50,8 @@ export default async function Home({
         tools={tools}
         experiences={experiences}
         education={education}
+        awards={awards}
+        certifications={certifications}
         projects={projects}
       />
 
