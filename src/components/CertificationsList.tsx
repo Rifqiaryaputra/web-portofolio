@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import type { Certification } from "@/lib/supabase";
 
-export default function CertificationsSection({
+export default function CertificationsList({
   certifications,
 }: {
   certifications: Certification[];
@@ -20,63 +19,65 @@ export default function CertificationsSection({
     return () => window.removeEventListener("keydown", onKey);
   }, [viewing]);
 
-  if (certifications.length === 0) return null;
-
   const isPdf = viewing?.image_url ? /\.pdf($|\?)/i.test(viewing.image_url) : false;
 
   return (
-    <section className="certifications pt-4">
-      <h2 className="bg-primary text-title inline-block px-3 py-1 font-medium mb-8 text-sm md:text-base">
-        Certifications
-      </h2>
+    <>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
+        {certifications.map((cert) => (
+          <div key={cert.id} className="flex flex-row items-start gap-4 w-full">
+            <div className="flex-shrink-0">
+              {cert.image_url ? (
+                <button
+                  type="button"
+                  onClick={() => setViewing(cert)}
+                  className="w-32 md:w-48 h-24 md:h-32 flex-shrink-0 object-cover border-2 border-black cursor-pointer p-0 bg-transparent"
+                  aria-label={`View ${cert.title} image`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={cert.image_url}
+                    alt={cert.title}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ) : (
+                <div className="w-32 md:w-48 h-24 md:h-32 border-2 border-black flex items-center justify-center bg-gray-100">
+                  <i className="ri-image-line text-2xl text-title"></i>
+                </div>
+              )}
+            </div>
 
-      <div className="flex flex-col gap-6">
-        {certifications.slice(0, 2).map((cert) => (
-          <div
-            key={cert.id}
-            className="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-2 sm:gap-8 text-sm md:text-[15px]"
-          >
-            <div className="font-bold text-gray-800">{cert.date}</div>
-            <div>
-              <h3 className="font-bold">{cert.title}</h3>
-              {cert.issuer ? (
-                <div className="text-gray-500 font-medium">{cert.issuer}</div>
-              ) : null}
-              {cert.image_url || cert.url ? (
-                cert.image_url ? (
-                  <button
-                    type="button"
-                    onClick={() => setViewing(cert)}
-                    className="inline-flex items-center gap-1 text-black font-bold hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-0"
-                  >
-                    Lihat Sertifikat
-                    <i className="ri-image-line"></i>
-                  </button>
-                ) : (
-                  <a
-                    href={cert.url ?? "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-black font-bold hover:text-primary transition-colors"
-                  >
-                    Lihat Sertifikat
-                    <i className="ri-external-link-line"></i>
-                  </a>
-                )
+            <div className="min-w-0">
+              {cert.image_url ? (
+                <button
+                  type="button"
+                  onClick={() => setViewing(cert)}
+                  className="font-bold text-black hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-0 text-left text-sm md:text-base"
+                >
+                  {cert.title}
+                </button>
+              ) : cert.url ? (
+                <a
+                  href={cert.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-black hover:text-primary transition-colors text-sm md:text-base"
+                >
+                  {cert.title}
+                </a>
+              ) : (
+                <span className="font-bold text-sm md:text-base">{cert.title}</span>
+              )}
+              {cert.issuer || cert.date ? (
+                <div className="text-gray-500 text-sm md:text-[15px]">
+                  {[cert.issuer, cert.date].filter(Boolean).join(" - ")}
+                </div>
               ) : null}
             </div>
           </div>
         ))}
       </div>
-
-      {certifications.length > 3 && (
-        <Link
-          href="/certifications"
-          className="text-sm font-semibold text-black hover:text-primary transition-colors mt-4 flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
-        >
-          {`Show all ${certifications.length} certifications ➔`}
-        </Link>
-      )}
 
       {viewing?.image_url ? (
         <>
@@ -132,6 +133,6 @@ export default function CertificationsSection({
           </div>
         </>
       ) : null}
-    </section>
+    </>
   );
 }
